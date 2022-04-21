@@ -1,7 +1,7 @@
 {
   "name": "toodledo",
   "version": "0.1.0",
-  "homepage": "https://1ceb3rg.github.io/toodledo",
+  "homepage": "https://toodledo.vercel.app/",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

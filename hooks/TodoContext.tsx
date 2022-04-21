@@ -25,26 +25,30 @@ type Action =
   | { type: "EDIT_TODO"; payload: { index: Array<number>; item: string } }
   | { type: "DELETE_TODO"; payload: { index: Array<number> } };
 
-interface TodoList {
-  todos: Array<Todo>;
-  updating: boolean;
-}
-
 const todoReducer = produce((draft: Array<Todo>, action: Action) => {
   const t0 = performance.now();
   switch (action.type) {
     case "ADD_TODO":
       {
-        let todo = navTodo(
-          draft[action.payload.index[0]],
-          action.payload.index.slice(1)
-        );
-        todo.todos.push({
-          completed: false,
-          item: "",
-          todos: [],
-          index: action.payload.index,
-        });
+        if (action.payload.index.length === 0) {
+          draft.push({
+            completed: false,
+            item: "",
+            todos: [],
+            index: action.payload.index,
+          });
+        } else {
+          let todo = navTodo(
+            draft[action.payload.index[0]],
+            action.payload.index.slice(1)
+          );
+          todo.todos.push({
+            completed: false,
+            item: "",
+            todos: [],
+            index: action.payload.index,
+          });
+        }
       }
       break;
     case "TOGGLE_TODO":
@@ -67,18 +71,20 @@ const todoReducer = produce((draft: Array<Todo>, action: Action) => {
       break;
     case "DELETE_TODO":
       {
-        console.log({ action });
-        let todo;
-        if (action.payload.index.length > 1)
-          todo = navTodo(
+        console.log(action.payload.index);
+        if (action.payload.index.length === 1) {
+          draft.splice(action.payload.index[0], 1);
+        } else {
+          let todo = navTodo(
             draft[action.payload.index[0]],
             action.payload.index.slice(1, action.payload.index.length - 1)
           );
-        else todo = draft[action.payload.index[0]];
-        todo.todos.splice(
-          action.payload.index[action.payload.index.length - 1],
-          1
-        );
+
+          todo.todos.splice(
+            action.payload.index[action.payload.index.length - 1],
+            1
+          );
+        }
       }
       break;
   }
@@ -100,9 +106,7 @@ export const TodoContextProvider = ({
     todoReducer,
     localStorage.getItem("todo-list")
       ? JSON.parse(localStorage.getItem("todo-list") ?? "")
-      : ([
-          { completed: false, item: "new Todo", todos: [], index: [] },
-        ] as Array<Todo>)
+      : ([{ completed: false, item: "", todos: [], index: [] }] as Array<Todo>)
   );
 
   const updateTodoList = (action: Action) => {

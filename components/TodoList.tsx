@@ -10,7 +10,7 @@ function TodoList() {
     setTodoList({ type: "ADD_TODO", payload: { index: [] } });
   };
   return (
-    <div className="max-w-3xl min-w-fit pr-2 md:pr-4 rounded-lg mx-auto border-4 border-[#27ECF9]">
+    <div className="max-w-3xl min-w-fit pr-2 md:pr-4 rounded-lg py-2 mx-auto border-4 border-[#27ECF9]">
       <ol className="">
         {todoList.map((todo, index) => (
           <TodoItem
@@ -22,10 +22,8 @@ function TodoList() {
           ></TodoItem>
         ))}
       </ol>
-      <div className="w-full flex justify-end">
-        <div
-          className={`flex ml-2 my-2 ${"bg-[#27ECF9]"} rounded-lg h-fit w-fit  `}
-        >
+      <div className="w-full mb-2 flex justify-end">
+        <div className={`flex ${"bg-[#27ECF9]"} rounded-lg h-fit w-fit  `}>
           <Button
             title="Add Todo"
             className="md:h-6 md:w-6 h-3 w-3 flex"
@@ -38,4 +36,4 @@ function TodoList() {
     </div>
   );
 }
-export default TodoList;
+export default memo(TodoList);
